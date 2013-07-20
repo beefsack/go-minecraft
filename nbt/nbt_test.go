@@ -1,6 +1,7 @@
 package nbt
 
 import (
+	"fmt"
 	"os"
 	"testing"
 )
@@ -11,7 +12,8 @@ func TestRead(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer f.Close()
-	_, err = Decode(f)
+	data, err := Decode(f)
+	fmt.Println("%#v\n", data)
 	if err != nil {
 		t.Fatal(err)
 	}
