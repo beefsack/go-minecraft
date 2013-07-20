@@ -136,16 +136,16 @@ func DecodeString(br *bufio.Reader) (string, error) {
 	return string(strBytes), err
 }
 
-func DecodeList(br *bufio.Reader) (*List, error) {
+func DecodeList(br *bufio.Reader) (List, error) {
 	tagType, err := ReadTagType(br)
 	if err != nil {
-		return nil, err
+		return List{}, err
 	}
 	length, err := DecodeInt(br)
 	if err != nil {
-		return nil, err
+		return List{}, err
 	}
-	list := &List{
+	list := List{
 		ListType: tagType,
 		Items:    make([]interface{}, length),
 	}

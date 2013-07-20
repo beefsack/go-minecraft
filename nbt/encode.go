@@ -28,7 +28,7 @@ func DetectPayloadType(payload interface{}) (tagType int, err error) {
 		tagType = TAG_BYTE_ARRAY
 	} else if _, ok := payload.(string); ok {
 		tagType = TAG_STRING
-	} else if _, ok := payload.(*List); ok {
+	} else if _, ok := payload.(List); ok {
 		tagType = TAG_LIST
 	} else if _, ok := payload.(map[string]interface{}); ok {
 		tagType = TAG_COMPOUND
@@ -190,7 +190,7 @@ func EncodeString(payload interface{}, w io.Writer) error {
 }
 
 func EncodeList(payload interface{}, w io.Writer) error {
-	list, ok := payload.(*List)
+	list, ok := payload.(List)
 	if !ok {
 		return errors.New("Not a list")
 	}

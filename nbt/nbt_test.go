@@ -65,7 +65,7 @@ func testMatchesBigTest(t *testing.T, data map[string]interface{}) {
 		t.Fatal("nested compound test -> egg -> value not correct, got",
 			eggValue)
 	}
-	listTestLong := level["listTest (long)"].(*List)
+	listTestLong := level["listTest (long)"].(List)
 	for i := 0; i < 5; i++ {
 		listTestLongItem := listTestLong.Items[i].(int64)
 		if listTestLongItem != int64(11+i) {
@@ -77,7 +77,7 @@ func testMatchesBigTest(t *testing.T, data map[string]interface{}) {
 	if byteTest != 127 {
 		t.Fatal("byteTest not correct, got", byteTest)
 	}
-	listTestCompound := level["listTest (compound)"].(*List)
+	listTestCompound := level["listTest (compound)"].(List)
 	listTestCompound0 := listTestCompound.Items[0].(map[string]interface{})
 	listTestCompound0Name := listTestCompound0["name"].(string)
 	if listTestCompound0Name != "Compound tag #0" {
