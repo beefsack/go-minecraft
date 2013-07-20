@@ -1,8 +1,23 @@
 package nbt
 
 import (
+	"compress/gzip"
+	"io"
+	"os"
 	"testing"
 )
+
+func bigTestReader() io.Reader {
+	f, err := os.Open("../test_files/bigtest.nbt")
+	if err != nil {
+		panic(err.Error())
+	}
+	r, err := gzip.NewReader(f)
+	if err != nil {
+		panic(err.Error())
+	}
+	return r
+}
 
 func testMatchesBigTest(t *testing.T, data map[string]interface{}) {
 	// Check data matches official test

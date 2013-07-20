@@ -2,7 +2,6 @@ package nbt
 
 import (
 	"bufio"
-	"compress/gzip"
 	"encoding/binary"
 	"errors"
 	"fmt"
@@ -10,15 +9,7 @@ import (
 )
 
 func Decode(r io.Reader) (map[string]interface{}, error) {
-	var br *bufio.Reader
-	gzr, err := gzip.NewReader(r)
-	if err == nil {
-		defer gzr.Close()
-		br = bufio.NewReader(gzr)
-	} else {
-		// Fall back to uncompressed
-		br = bufio.NewReader(r)
-	}
+	br := bufio.NewReader(r)
 	_, name, tagPayload, err := DecodeTag(br)
 	// Return a map with a single root tag
 	return map[string]interface{}{
@@ -86,6 +77,8 @@ func DecodePayload(tagType int, br *bufio.Reader) (payload interface{},
 		payload, err = DecodeList(br)
 	case TAG_COMPOUND:
 		payload, err = DecodeCompound(br)
+	case TAG_INT_ARRAY:
+		payload, err = DecodeIntArray(br)
 	default:
 		err = errors.New(
 			fmt.Sprintf("Unknown type: %d", tagType))
@@ -182,4 +175,21 @@ func DecodeCompound(br *bufio.Reader) (map[string]interface{}, error) {
 		compound[name] = payload
 	}
 	return compound, nil
+}
+
+func DecodeIntArray(br *bufio.Reader) ([]int32, error) {
+	length, err := DecodeInt(br)
+	if err != nil {
+		return nil, err
+	}
+	intArray := make([]int32, length)
+	var intVal int32
+	for i := int32(0); i < length; i++ {
+		err = binary.Read(br, binary.BigEndian, &intVal)
+		if err != nil {
+			break
+		}
+		intArray[i] = intVal
+	}
+	return intArray, err
 }
