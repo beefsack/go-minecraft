@@ -2,7 +2,6 @@ package nbt
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 )
 
@@ -11,7 +10,6 @@ func TestEncode(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Printf("%#v\n", data)
 	t.Log("Decoded data.")
 	buf := bytes.NewBuffer([]byte{})
 	err = Encode(data, buf)
@@ -22,7 +20,6 @@ func TestEncode(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Printf("%#v\n", decodedData)
 	testMatchesBigTest(t, decodedData)
 }
 
